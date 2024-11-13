@@ -1,160 +1,138 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
-# C extensions
-*.so
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-cover/
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-.pybuilder/
-target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
-# .python-version
-
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
-
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
-
-# pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#pdm.lock
-#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
-#   in version control.
-#   https://pdm.fming.dev/#use-with-ide
-.pdm.toml
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# pytype static type analyzer
-.pytype/
-
-# Cython debug symbols
-cython_debug/
-
-# PyCharm
-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#  and can be added to the global gitignore or merged into this file.  For a more nuclear
-#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
+import sys 
+import os 
+import glob 
+import re 
+import numpy as np 
+ 
+from flask import Flask, redirect, url_for, request, render_template 
+from werkzeug.utils import secure_filename 
+from flask import Flask , render_template , request , url_for 
+import pickle 
+ 
+from keras.applications.imagenet_utils import preprocess_input, 
+decode_predictions 
+from keras.models import load_model 
+from keras.preprocessing import image 
+ 
+import tensorflow as tf 
+from tensorflow.keras import models, layers 
+import math 
+import matplotlib.pyplot as plt 
+ 
+from matplotlib.image import imread 
+import cv2 
+from PIL import Image 
+ 
+app = Flask(' name ') 
+ 
+SelectedRFModel_AD = pickle.load(open('SelectedRFModel_AD.pkl', 'rb')) 
+SelectedBoostModel = pickle.load(open('SelectedBoostModel.pkl', 'rb')) 
+ 
+@app.route('/') 
+def index(): 
+return render_template('index.html') 
+41  
+@app.route('/server_home') 
+def server_home(): 
+return render_template('index.html') 
+ 
+ 
+@app.route('/Alzhiemer_Disease') 
+def Alzhiemer_Disease(): 
+return render_template('Alzhiemer_Disease.html') 
+ 
+model_path = 'alzheimer_detection_model.h5' 
+ 
+ 
+model = load_model(model_path) 
+ 
+class_names = np.array(['Mild_Demented', 'Moderate_Demented', 'Non_Demented', 
+'Very_Mild_Demented']) 
+ 
+@app.route('/image_predict', methods = ['GET', 'POST']) 
+def image2(): 
+if(request.method == 'POST'): 
+f=request.files['file'] 
+ 
+basepath = os.path.dirname( file ) 
+file_path = os.path.join( 
+basepath, 'uploads', secure_filename(f.filename)) 
+f.save(file_path) 
+ 
+image = Image.open(f) 
+image = image.resize((128, 128)) 
+image = image.convert("RGB") 
+img = np.array(image).reshape(-1, 128, 128, 3 
+ 
+ 
+result = model.predict(img) 
+ 
+ 
+predicted_class_index = np.argmax(result) 
+ 
+predicted_class = class_names[predicted_class_index] 
+print("Predicted class:", predicted_class) 
+ 
+val = max(result[0]) 
+confidence = round(100 * (max(result[0])), 2) 
+l1 = 100 * (result[0][0]) 
+l2 = 100 * (result[0][1]) 
+l3 = 100 * (result[0][2]) 
+l4 = 100 * (result[0][3]) 
+ 
+l1f = "{:.9f}%".format(l1) 
+l2f = "{:.9f}%".format(l2) 
+l3f = "{:.9f}%".format(l3) 
+l4f = "{:.9f}%".format(l4) 
+ 
+ 
+p1 = "\n Mild_Demented : "+str(l1f) 
+p2 = "\n Moderate_Demented : "+str(l2f) 
+p3 = "\n Non_Demented : "+str(l3f) 
+p4 = "\n Very_Mild_Demented : "+str(l4f) 
+ 
+res = 'The predicted stage is \''+ predicted_class +"\'" 
+ 
+confidence = 90 
+'''predicted_class = class_names[predicted_class_index] 
+print("Predicted class:", predicted_class) 
+ 
+res = 'The predicted stage is \''+ predicted_class +"\'" + "\n 
+Confidence:" + str(confidence) + "\n Val:" + str(val)''' 
+ 
+if predicted_class=='Mild_Demented': 
+precaution = "For individuals in the Mild Demented stage, it is crucial to focus on cognitive stimulation and social engagement. Activities such as puzzles, reading, and memory games can help stimulate the brain. 
+Regular medical check-ups are essential to monitor cognitive function, and a 
+balanced diet along with regular exercise promotes overall health. Medication 
+management should be discussed with healthcare professionals to slow down 
+cognitive decline." 
+elif predicted_class=='Moderate_Demented': 
+precaution = "As the disease progresses to the Moderate Demented 
+stage, daily routine assistance becomes necessary. Providing help with daily 
+activities like dressing and eating, and implementing a structured daily 
+routine can reduce confusion. Safety measures, including modifications to the 
+43  
+living environment to reduce fall risks, are important. Professional 
+caregiving support or placement in memory care facilities may be considered, 
+and emotional support through companionship and understanding is crucial." 
+elif predicted_class=='Non_Demented': 
+precaution = "In the Non-Demented stage, maintaining cognitive 
+health remains a priority. Continuing activities that promote cognitive health 
+and encouraging ongoing social interactions are important. Regular exercise 
+and participation in community events contribute to overall well-being. Memory 
+training exercises and brain-boosting foods should be incorporated into daily 
+life, along with regular check-ups to monitor overall health." 
+elif predicted_class=='Very_Mild_Demented': 
+precaution = "For those in the Very Mild Demented stage, early 
+intervention programs become valuable. Enrolling in programs designed for 
+early-stage dementia and accessing resources for cognitive training and 
+support is recommended. Family and community involvement are crucial, and 
+strong connections with loved ones provide emotional support. Exploring 
+adaptive technologies to assist with memory and daily tasks, along with legal 
+and financial planning, becomes important for future care needs." 
+ 
+return render_template("result2.html", n=res, p1=p1, p2=p2, p3=p3, p4=p4, 
+confidence=confidence, precaution=precaution) 
+ 
+if  name  == " main ": 
+app.run(host='0.0.0.0', port=8080, debug=True)
