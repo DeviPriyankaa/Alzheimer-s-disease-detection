@@ -5,6 +5,7 @@ the AD using deep learning and Convolutional Neural Networks (CNN) along with VG
 The primary focus is on leveraging deep learning algorithms to analyze MRI images of the brain and classify them into different stages of Alzheimer's disease. By implementing a web application, users can upload MRI
 images, and the system will provide predictions regarding the stage of Alzheimer's disease along with associated confidence levels. Additionally, the system offers personalized precautions and recommendations based
 on the predicted stage, aiding caregivers and individuals in understanding and managing the condition effectively. 
+
 Software Requirements: 
 • Os: windows 10 
 • Server-side script: python 3.10.4 
