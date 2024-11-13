@@ -101,35 +101,23 @@ res = 'The predicted stage is \''+ predicted_class +"\'" + "\n
 Confidence:" + str(confidence) + "\n Val:" + str(val)''' 
  
 if predicted_class=='Mild_Demented': 
-precaution = "For individuals in the Mild Demented stage, it is crucial to focus on cognitive stimulation and social engagement. Activities such as puzzles, reading, and memory games can help stimulate the brain. 
-Regular medical check-ups are essential to monitor cognitive function, and a 
-balanced diet along with regular exercise promotes overall health. Medication 
-management should be discussed with healthcare professionals to slow down 
-cognitive decline." 
+precaution = "For individuals in the Mild Demented stage, it is crucial to focus on cognitive stimulation and social engagement. Activities such as puzzles, 
+reading, and memory games can help stimulate the brain. Regular medical check-ups are essential to monitor cognitive function, and a balanced diet along with 
+regular exercise promotes overall health. Medication management should be discussed with healthcare professionals to slow down cognitive decline." 
 elif predicted_class=='Moderate_Demented': 
-precaution = "As the disease progresses to the Moderate Demented 
-stage, daily routine assistance becomes necessary. Providing help with daily 
-activities like dressing and eating, and implementing a structured daily 
-routine can reduce confusion. Safety measures, including modifications to the 
-43  
-living environment to reduce fall risks, are important. Professional 
-caregiving support or placement in memory care facilities may be considered, 
-and emotional support through companionship and understanding is crucial." 
+precaution = "As the disease progresses to the Moderate Demented stage, daily routine assistance becomes necessary. Providing help with daily activities like 
+dressing and eating, and implementing a structured daily routine can reduce confusion. Safety measures, including modifications to the living environment to 
+reduce fall risks, are important. Professional caregiving support or placement in memory care facilities may be considered, and emotional support through companion
+ship and understanding is crucial." 
 elif predicted_class=='Non_Demented': 
-precaution = "In the Non-Demented stage, maintaining cognitive 
-health remains a priority. Continuing activities that promote cognitive health 
-and encouraging ongoing social interactions are important. Regular exercise 
-and participation in community events contribute to overall well-being. Memory 
-training exercises and brain-boosting foods should be incorporated into daily 
-life, along with regular check-ups to monitor overall health." 
+precaution = "In the Non-Demented stage, maintaining cognitive health remains a priority. Continuing activities that promote cognitive health and encouraging 
+ongoing social interactions are important. Regular exercise and participation in community events contribute to overall well-being. Memory training exercises and 
+brain-boosting foods should be incorporated into daily life, along with regular check-ups to monitor overall health." 
 elif predicted_class=='Very_Mild_Demented': 
-precaution = "For those in the Very Mild Demented stage, early 
-intervention programs become valuable. Enrolling in programs designed for 
-early-stage dementia and accessing resources for cognitive training and 
-support is recommended. Family and community involvement are crucial, and 
-strong connections with loved ones provide emotional support. Exploring 
-adaptive technologies to assist with memory and daily tasks, along with legal 
-and financial planning, becomes important for future care needs." 
+precaution = "For those in the Very Mild Demented stage, early intervention programs become valuable. Enrolling in programs designed for early-stage dementia and 
+accessing resources for cognitive training and support is recommended. Family and community involvement are crucial, and strong connections with loved ones 
+provide emotional support. Exploring adaptive technologies to assist with memory and daily tasks, along with legal and financial planning, becomes important for 
+future care needs." 
  
 return render_template("result2.html", n=res, p1=p1, p2=p2, p3=p3, p4=p4, 
 confidence=confidence, precaution=precaution) 
