@@ -11,6 +11,7 @@ Software Requirements:
 • Server-side script: python 3.10.4 
 • Ide: Jupyter Notebook 
 • Libraries used: numpy, pandas, matplotlib, pillow, opencv-python, flask, seaborn, tensorflow, scikit-learn 
+
 Classification: 
 The results will be displayed which type of Alzheimer's disease, 
 1. Mild Demented 
